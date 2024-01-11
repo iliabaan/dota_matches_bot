@@ -110,7 +110,13 @@ func (b *Bot) createMessage(match model.Match) tgbotapi.MessageConfig {
 	var action string
 	kda := fmt.Sprintf("%d/%d/%d", p.Kills, p.Deaths, p.Assists)
 
-	kdaCalculated := float32(p.Kills+p.Assists) / float32(p.Deaths)
+	var kdaCalculated float32
+	if p.Deaths == 0 {
+		kdaCalculated = float32(p.Kills + p.Assists)
+	} else {
+		kdaCalculated = float32(p.Kills+p.Assists) / float32(p.Deaths)
+	}
+
 	if p.IsVictory {
 		action = "победил" + stratz.GetOutcome(m.AnalysisOutcome)
 	} else {
